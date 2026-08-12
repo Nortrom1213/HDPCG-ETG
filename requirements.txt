@@ -1,0 +1,6 @@
+ortools>=9.10
+protobuf>=6.33.1,<6.34
+matplotlib>=3.8
+pandas>=2.0
+pytest>=8.0
+tabulate>=0.9

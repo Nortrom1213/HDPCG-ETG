@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Procedural Obstacle Course Preview</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #8de0ff;
+        color: #12203a;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      #game-canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .hud {
+        position: fixed;
+        left: 18px;
+        top: 18px;
+        display: grid;
+        gap: 10px;
+        max-width: min(420px, calc(100vw - 36px));
+        pointer-events: none;
+      }
+
+      .hud-panel {
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        border-radius: 8px;
+        background: rgba(248, 254, 255, 0.78);
+        box-shadow: 0 12px 30px rgba(25, 86, 120, 0.18);
+        padding: 10px 12px;
+        backdrop-filter: blur(8px);
+      }
+
+      .title {
+        font-weight: 800;
+        font-size: 15px;
+        letter-spacing: 0;
+      }
+
+      #status-output,
+      #load-output {
+        margin-top: 4px;
+        font: 12px Consolas, "SFMono-Regular", monospace;
+        color: #26425f;
+        white-space: pre-wrap;
+      }
+
+      .controls {
+        position: fixed;
+        right: 18px;
+        bottom: 18px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      button,
+      select {
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.84);
+        color: #153250;
+        font: 700 13px "Segoe UI", Arial, sans-serif;
+        box-shadow: 0 10px 24px rgba(25, 86, 120, 0.18);
+      }
+
+      button {
+        padding: 0 12px;
+        cursor: pointer;
+      }
+
+      select {
+        padding: 0 30px 0 10px;
+      }
+
+      button:hover,
+      select:hover {
+        background: #ffffff;
+      }
+
+      .reticle {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 10px;
+        height: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 1px rgba(18, 32, 58, 0.22);
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="game-canvas"></canvas>
+    <section class="hud">
+      <div class="hud-panel">
+        <div class="title">Procedural Obstacle Course Preview</div>
+        <div id="load-output">loading</div>
+        <div id="status-output">status: waiting</div>
+      </div>
+      <div class="hud-panel" aria-label="controls">
+        WASD / Arrows · Space · Mouse
+      </div>
+    </section>
+    <div class="controls">
+      <select id="quality-select" aria-label="visual quality">
+        <option value="medium">medium</option>
+        <option value="high" selected>high</option>
+      </select>
+      <button id="reset-player" type="button">Respawn</button>
+      <button id="toggle-view-mode" type="button">God View</button>
+    </div>
+    <div class="reticle" aria-hidden="true"></div>
+    <script type="module" src="src/main-obstacle-course-preview.js?v=2"></script>
+  </body>
+</html>

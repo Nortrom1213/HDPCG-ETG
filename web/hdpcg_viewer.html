@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HDPCG 5D Viewer</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header class="headline">
+        <div>
+          <h1>HDPCG 5D Viewer</h1>
+        </div>
+        <div class="badge-row"></div>
+      </header>
+
+      <section class="sidebar">
+        <div class="card">
+          <h2>HDPCG Controls</h2>
+          <label class="file-label">
+            Import JSON
+            <input id="import-file" type="file" accept=".json,application/json" />
+          </label>
+          <p class="hint">Import level/package/ETG JSON. If the file is ETG-only, geometry will be rebuilt with default settings.</p>
+          <label>
+            Time
+            <input id="time-slider" type="range" min="0" max="0" value="0" />
+          </label>
+          <label>
+            Puzzle Phase
+            <input id="phase-slider" type="range" min="0" max="0" value="0" />
+          </label>
+          <label class="toggle">
+            <input id="show-reachable" type="checkbox" checked />
+            Show Reachable Cells
+          </label>
+          <label>
+            Reachability View
+            <select id="reach-mode">
+              <option value="cumulative" selected>Cumulative</option>
+              <option value="step">Step</option>
+            </select>
+          </label>
+          <label class="toggle">
+            <input id="show-enemies" type="checkbox" checked />
+            Show Enemy Cells
+          </label>
+        </div>
+
+        <div class="card">
+          <h2>BFS Summary</h2>
+          <pre id="bfs-output">waiting...</pre>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="stage-header">
+          <div class="status" id="viewer-status">t=0 | phase=0 | reachable=0</div>
+          <div class="legend">Walkable cells (gray), locks (purple), reachable (green), keys (yellow), enemies (red).</div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="viewer-canvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="src/hdpcg-viewer.js"></script>
+  </body>
+</html>

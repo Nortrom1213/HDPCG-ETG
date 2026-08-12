@@ -1,0 +1,13 @@
+{
+  "id": "manual",
+  "name": "Manual Procedural Theme",
+  "sources": [],
+  "models": {},
+  "textures": {},
+  "palette": {
+    "skyTop": 7981311,
+    "skyBottom": 14152447,
+    "fog": 12183039
+  },
+  "notes": "Manual mode relies on built-in procedural meshes/materials only."
+}

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ETG Editor</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="editor-body">
+    <main class="editor-layout">
+      <header class="editor-header">
+        <div>
+          <h1>ETG Editor</h1>
+        </div>
+        <nav class="editor-nav">
+          <button id="export-json" class="ghost">Export JSON</button>
+        </nav>
+      </header>
+
+      <section class="editor-sidebar">
+        <div class="card">
+          <h2>Graph Actions</h2>
+          <div class="button-row">
+            <button id="add-node">Add Node</button>
+            <button id="add-edge" class="ghost">Add Edge</button>
+          </div>
+          <div class="button-row">
+            <button id="auto-layout" class="ghost">Auto Layout</button>
+            <button id="validate" class="ghost">Validate</button>
+          </div>
+          <div class="button-row">
+            <button id="play-preview" class="ghost">Play Preview</button>
+            <button id="hdpcg-preview" class="ghost">5D Preview</button>
+            <label class="ghost file-label">
+              Import JSON
+              <input id="import-json" type="file" accept="application/json" />
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Nodes</h2>
+          <div id="node-list" class="list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Edges</h2>
+          <div id="edge-list" class="list"></div>
+        </div>
+      </section>
+
+      <section class="editor-canvas">
+        <canvas id="graph-canvas"></canvas>
+      </section>
+
+      <section class="editor-panel">
+        <div class="card">
+          <h2>Selection</h2>
+          <div id="selection-panel">
+            <p class="hint">Select a node or edge to edit properties.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Canonical Route</h2>
+          <pre id="route-output">no route computed yet</pre>
+        </div>
+
+        <div class="card">
+          <h2>Validation</h2>
+          <pre id="validation-output">no validation run yet</pre>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="src/editor.js"></script>
+  </body>
+</html>

@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Procedural Obstacle Course Editor</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #d8f4ff;
+        color: #17263c;
+        font-family: "Segoe UI", Arial, sans-serif;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 410px;
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+      }
+
+      #game-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      #label-layer {
+        position: absolute;
+        inset: 0 410px 0 0;
+        overflow: hidden;
+        pointer-events: none;
+      }
+
+      .scene-label {
+        position: absolute;
+        min-width: 42px;
+        max-width: 148px;
+        padding: 3px 7px;
+        transform: translate(-50%, -115%);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        border-radius: 6px;
+        background: rgba(18, 31, 48, 0.76);
+        box-shadow: 0 2px 8px rgba(18, 31, 48, 0.16);
+        color: #ffffff;
+        font: 700 11px "Segoe UI", Arial, sans-serif;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      .scene-label.is-selected {
+        z-index: 2;
+        max-width: 180px;
+        border-color: rgba(11, 104, 162, 0.86);
+        background: rgba(255, 255, 255, 0.96);
+        color: #0b4e7a;
+        font-size: 13px;
+      }
+
+      .panel {
+        overflow: auto;
+        border-left: 1px solid rgba(41, 74, 96, 0.22);
+        background: rgba(248, 253, 255, 0.94);
+        padding: 14px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 16px;
+        font-weight: 800;
+      }
+
+      label {
+        display: grid;
+        gap: 4px;
+        margin: 9px 0;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .section {
+        margin: 12px 0;
+        padding-top: 10px;
+        border-top: 1px solid rgba(41, 74, 96, 0.15);
+      }
+
+      .section-title {
+        margin: 0 0 8px;
+        color: #37536b;
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .selected-summary {
+        min-height: 44px;
+        padding: 8px;
+        border: 1px solid rgba(35, 73, 96, 0.17);
+        border-radius: 6px;
+        background: #ffffff;
+        color: #233a55;
+        font: 12px Consolas, "SFMono-Regular", monospace;
+        line-height: 1.35;
+        word-break: break-word;
+      }
+
+      select,
+      input,
+      textarea,
+      button {
+        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid rgba(35, 73, 96, 0.25);
+        border-radius: 6px;
+        background: #ffffff;
+        color: #17263c;
+        font: 13px "Segoe UI", Arial, sans-serif;
+      }
+
+      select,
+      input,
+      button {
+        height: 32px;
+      }
+
+      input {
+        padding: 0 8px;
+      }
+
+      button {
+        cursor: pointer;
+        font-weight: 800;
+      }
+
+      button.is-active {
+        border-color: rgba(11, 104, 162, 0.78);
+        background: #dff4ff;
+        color: #0b4e7a;
+      }
+
+      .toolbar,
+      .quick-grid {
+        display: grid;
+        gap: 8px;
+      }
+
+      .toolbar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .grid3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .quick-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .quick-grid button {
+        min-width: 0;
+        padding: 0 4px;
+      }
+
+      .toggle-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .toggle-row label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin: 0;
+        min-height: 32px;
+        padding: 0 8px;
+        border: 1px solid rgba(35, 73, 96, 0.17);
+        border-radius: 6px;
+        background: #ffffff;
+      }
+
+      .toggle-row input {
+        width: 16px;
+        height: 16px;
+        padding: 0;
+      }
+
+      .status {
+        margin: 8px 0 12px;
+        min-height: 32px;
+        color: #37536b;
+        font: 12px Consolas, "SFMono-Regular", monospace;
+        white-space: pre-wrap;
+      }
+
+      textarea {
+        height: 150px;
+        resize: vertical;
+        padding: 8px;
+        font: 11px Consolas, "SFMono-Regular", monospace;
+      }
+
+      .hint {
+        color: #60788f;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="workspace">
+      <canvas id="game-canvas"></canvas>
+      <div id="label-layer"></div>
+      <aside class="panel">
+        <h1>Procedural Obstacle Course Editor</h1>
+        <div id="status-output" class="status">loading</div>
+
+        <div class="section">
+          <div class="section-title">Transform</div>
+          <div class="toolbar" role="group" aria-label="Transform mode">
+            <button class="tool-button is-active" type="button" data-transform-mode="move" title="Move selected platform">Move</button>
+            <button class="tool-button" type="button" data-transform-mode="rotate" title="Rotate selected platform">Rotate</button>
+            <button class="tool-button" type="button" data-transform-mode="scale" title="Scale selected platform">Scale</button>
+          </div>
+          <div class="toggle-row">
+            <label><input id="show-labels" type="checkbox" checked />Labels</label>
+            <label><input id="sync-asset-size" type="checkbox" checked />Asset size</label>
+          </div>
+        </div>
+
+        <label>
+          Platform
+          <input id="platform-filter" type="search" placeholder="filter id / node" />
+          <select id="platform-select"></select>
+        </label>
+
+        <div id="selected-summary" class="selected-summary"></div>
+
+        <div class="grid3">
+          <label>X <input id="pos-x" type="number" step="0.1" /></label>
+          <label>Y <input id="pos-y" type="number" step="0.1" /></label>
+          <label>Z <input id="pos-z" type="number" step="0.1" /></label>
+        </div>
+
+        <label>
+          Yaw Degrees
+          <input id="yaw-deg" type="number" step="1" />
+        </label>
+
+        <div class="grid3">
+          <label>Size X <input id="size-x" type="number" step="0.1" min="0.1" /></label>
+          <label>Size Y <input id="size-y" type="number" step="0.1" min="0.1" /></label>
+          <label>Size Z <input id="size-z" type="number" step="0.1" min="0.1" /></label>
+        </div>
+
+        <div class="grid3">
+          <label>Asset X <input id="asset-x" type="number" step="0.1" min="0.1" /></label>
+          <label>Asset Y <input id="asset-y" type="number" step="0.1" min="0.1" /></label>
+          <label>Asset Z <input id="asset-z" type="number" step="0.1" min="0.1" /></label>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Quick Adjust</div>
+          <div class="grid3">
+            <label>Move <input id="move-step" type="number" step="0.1" min="0.01" value="0.5" /></label>
+            <label>Rotate <input id="rotate-step" type="number" step="1" min="0.1" value="5" /></label>
+            <label>Scale <input id="scale-step" type="number" step="0.1" min="0.01" value="0.5" /></label>
+          </div>
+          <div class="quick-grid" aria-label="Nudge selected platform">
+            <button type="button" data-nudge="x:-1">X-</button>
+            <button type="button" data-nudge="y:1">Y+</button>
+            <button type="button" data-nudge="x:1">X+</button>
+            <button type="button" data-nudge="z:-1">Z-</button>
+            <button type="button" data-nudge="y:-1">Y-</button>
+            <button type="button" data-nudge="z:1">Z+</button>
+          </div>
+          <div class="quick-grid" aria-label="Rotate and scale selected platform" style="margin-top: 8px">
+            <button type="button" data-rotate="-1">Yaw-</button>
+            <button type="button" id="focus-selected-button">Focus</button>
+            <button type="button" data-rotate="1">Yaw+</button>
+            <button type="button" data-scale="x:-1">Size X-</button>
+            <button type="button" data-scale="z:-1">Size Z-</button>
+            <button type="button" data-scale="y:-1">Size Y-</button>
+            <button type="button" data-scale="x:1">Size X+</button>
+            <button type="button" data-scale="z:1">Size Z+</button>
+            <button type="button" data-scale="y:1">Size Y+</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <button id="apply-button" type="button">Apply</button>
+          <button id="reset-button" type="button">Reset Selected</button>
+        </div>
+        <div class="row">
+          <button id="copy-button" type="button">Copy JSON</button>
+          <button id="download-button" type="button">Download JSON</button>
+        </div>
+
+        <label>
+          Export Preview
+          <textarea id="json-output" spellcheck="false"></textarea>
+        </label>
+      </aside>
+    </main>
+    <script type="module" src="src/main-layout-editor.js?v=12"></script>
+  </body>
+</html>

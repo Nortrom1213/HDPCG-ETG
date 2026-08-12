@@ -1,0 +1,173 @@
+{
+  "methods": [
+    {
+      "id": "abl_full_main",
+      "label": "Full Main",
+      "generatorMode": "hdpcg_incremental",
+      "config": {
+        "ablationGroup": "full_main",
+        "componentStrategy": "diverse",
+        "candidatePoolSize": 12,
+        "selectionTopP": 0.70,
+        "selectionTemperature": 0.80,
+        "alignmentWeight": 0.35,
+        "playabilityWeight": 0.30,
+        "noveltyWeight": 0.20,
+        "shapeWeight": 0.15,
+        "riskWeight": 0.20,
+        "timeStep": 1.0,
+        "maxTimeHorizon": 180,
+        "validationMaxPeriodTicks": 180,
+        "validationLocalPaddingCells": 3,
+        "mainCanonicalSafeMode": true,
+        "mainCanonicalMaxComplexity": 0.65,
+        "mainCanonicalForceLegacyOnFail": true,
+        "mainPostEdgeRepair": true,
+        "mainReachabilityBudgetScale": 1.0,
+        "mainCanonicalChallengeScale": 0.38,
+        "mainCanonicalJitterScale": 0.30,
+        "mainSpineFirstMode": true,
+        "mainSpineRepairBudget": 3,
+        "mainSpineMaxDetour": 0.18,
+        "mainSpineEdgeSegmentLength": 6.2,
+        "mainSpineSafeGround": true,
+        "mainSpineLocalCheckStride": 1,
+        "mainSpineRollbackOnFail": true,
+        "mainInfillSkipLocalValidation": false,
+        "mainAlwaysLocalValidation": true,
+        "mainAllowFastLocalBudget": true,
+        "mainCanonicalValidationScale": 0.80,
+        "mainInfillValidationScale": 0.55,
+        "mainValidationMinTime": 12,
+        "mainValidationMinStates": 12000,
+        "mainValidationMinQueue": 10000,
+        "mainValidationMinJumpOffsets": 100,
+        "mainInfillDiversityTarget": 0.46,
+        "mainInfillFamilyMinCount": 7,
+        "mainInfillMaxPerNode": 2,
+        "mainInfillCoverageMinRatio": 0.35,
+        "mainInfillCoveragePass": true,
+        "mainEventPacingPass": true,
+        "mainEventBins": 6,
+        "mainEventDensityTarget": 0.09,
+        "mainEventDensityTolerance": 0.05,
+        "mainQuickMaxTime": 36,
+        "mainQuickMaxStates": 30000,
+        "mainQuickMaxQueue": 22000,
+        "mainQuickMaxJumpOffsets": 160,
+        "mainInfillMaxComplexity": 0.78,
+        "maxCandidateComplexity": 0.92,
+        "mainCanonicalSafeNodeFamilies": [
+          "start_plaza",
+          "start_ramp",
+          "goal_platform",
+          "open_room",
+          "serpentine_room",
+          "safe_key_pocket",
+          "center_gate",
+          "checkpoint_pocket"
+        ],
+        "disallowConnectorFamilies": [
+          "moving_shuttle_bridge",
+          "hazard_chicane_bridge",
+          "split_merge_bridge",
+          "vertical_lift_bridge",
+          "zigzag_bridge"
+        ],
+        "connectorSegmentLength": 6.8,
+        "maxLocalRejects": 16,
+        "maxAttempts": 14,
+        "maxCanonicalRetries": 1,
+        "validationMaxTime": 14,
+        "validationMaxStates": 7000,
+        "validationMaxQueue": 5200,
+        "validationMaxJumpOffsets": 100,
+        "validationMaxTimeHorizon": 180,
+        "validationAllowSiblingTolerance": true,
+        "benchmarkLocalValidationStride": 1,
+        "benchmarkBestOfShared": 1,
+        "benchmarkTopologyBudgetProfile": "strict_balanced",
+        "keyLockPrecheckMode": "all",
+        "fallbackEnabled": true,
+        "forceConnectivityFallback": false,
+        "mainInfillConnectivityFallback": true,
+        "mainKeyLockRoutePass": true,
+        "mainRouteRepairBudget": 2,
+        "mainSpineForcedLinearPerEdgeCap": 2
+      }
+    },
+    {
+      "id": "abl_no_local_5d",
+      "label": "No Local 5D Validation",
+      "generatorMode": "hdpcg_incremental",
+      "config": {
+        "inheritFrom": "abl_full_main",
+        "ablationGroup": "no_local_5d",
+        "benchmarkDisableLocalValidation": true,
+        "mainAlwaysLocalValidation": false,
+        "mainInfillSkipLocalValidation": true
+      }
+    },
+    {
+      "id": "abl_no_forbidden_marker",
+      "label": "No Forbidden-Marker Shortcut Check",
+      "generatorMode": "hdpcg_incremental",
+      "config": {
+        "inheritFrom": "abl_full_main",
+        "ablationGroup": "no_forbidden_marker",
+        "localValidationDisableForbiddenMarkers": true
+      }
+    },
+    {
+      "id": "abl_no_lock_semantic_local",
+      "label": "No Local Lock Semantic Check",
+      "generatorMode": "hdpcg_incremental",
+      "config": {
+        "inheritFrom": "abl_full_main",
+        "ablationGroup": "no_lock_semantic_local",
+        "localValidationDisableLockSemantics": true
+      }
+    },
+    {
+      "id": "abl_no_keylock_route_repair",
+      "label": "No Key-Lock Route Repair",
+      "generatorMode": "hdpcg_incremental",
+      "config": {
+        "inheritFrom": "abl_full_main",
+        "ablationGroup": "no_keylock_route_repair",
+        "mainKeyLockRoutePass": false,
+        "mainRouteRepairBudget": 0
+      }
+    },
+    {
+      "id": "abl_posthoc_constraint_like",
+      "label": "Post-hoc Constraint-like",
+      "generatorMode": "constraint_based",
+      "config": {
+        "ablationGroup": "posthoc_constraint_like",
+        "componentStrategy": "diverse",
+        "candidatePoolSize": 16,
+        "selectionTopP": 0.82,
+        "selectionTemperature": 0.95,
+        "maxLocalRejects": 30,
+        "maxAttempts": 40,
+        "safetyMargin": 0.65,
+        "benchmarkBestOfShared": 1,
+        "benchmarkTopologyBudgetProfile": "strict_balanced",
+        "keyLockPrecheckMode": "all",
+        "baselineKeyLockRoutePass": true,
+        "baselineRouteRepairBudget": 3,
+        "baselineCanonicalSurrogateStrictness": "high",
+        "baselineConnectivityBridgeMaxGap": 18.0,
+        "baselineRequireKeyNodeCoverage": true,
+        "baselineBuildRequiredEdgesOnly": true,
+        "baselineKeyDetourMaxExtraRatio": 0.45,
+        "baselineCanonicalSafeMode": true,
+        "baselineCanonicalMaxComplexity": 0.72,
+        "baselineLimitDynamicOnCanonical": true,
+        "fallbackEnabled": true,
+        "connectorSegmentLength": 6.4
+      }
+    }
+  ]
+}

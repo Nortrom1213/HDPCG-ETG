@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3D Platformer Render View</title>
+    <link rel="icon" href="data:," />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #aee6ff;
+      }
+      #game-canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      #status-output {
+        position: fixed;
+        left: 12px;
+        bottom: 10px;
+        padding: 6px 8px;
+        border-radius: 6px;
+        color: rgba(255, 255, 255, 0.86);
+        background: rgba(20, 24, 38, 0.42);
+        font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      }
+      body.clean #status-output {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="clean">
+    <canvas id="game-canvas"></canvas>
+    <div id="status-output">loading</div>
+    <script type="module" src="src/main-render-level.js?v=11"></script>
+  </body>
+</html>

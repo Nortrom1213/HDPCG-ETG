@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3D Platformer Game (Import Level)</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="layout">
+      <header class="headline">
+        <div>
+          <h1>3D Platformer Game</h1>
+        </div>
+        <div class="badge-row"></div>
+      </header>
+
+      <section class="sidebar">
+        <div class="card">
+          <h2>Import Python Level</h2>
+          <p class="hint">Start empty. Import a Python `level_*.json` or `level_package_*.json` file.</p>
+          <input id="import-level-json" type="file" accept=".json,application/json" />
+          <pre id="import-status-output">No file loaded.</pre>
+        </div>
+
+        <div class="card">
+          <h2>Controls</h2>
+          <p class="hint">Click canvas to lock mouse. Move mouse to look. WASD move. Space jump. God View: Space up, Ctrl down.</p>
+          <div class="button-row">
+            <button id="toggle-view-mode" class="ghost">Switch to God View</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Visual Theme</h2>
+          <label>
+            Theme
+            <select id="visual-theme">
+              <option value="safe_cc0">safe_cc0</option>
+              <option value="manual">manual</option>
+            </select>
+          </label>
+          <label>
+            Quality
+            <select id="visual-quality">
+              <option value="low">low</option>
+              <option value="medium" selected>medium</option>
+              <option value="high">high</option>
+            </select>
+          </label>
+          <label class="toggle">
+            <input id="postfx-toggle" type="checkbox" checked />
+            PostFX
+          </label>
+          <label class="toggle">
+            <input id="visual-debug-toggle" type="checkbox" />
+            Visual Debug
+          </label>
+          <div class="button-row">
+            <button id="apply-visual" class="ghost">Apply Visuals</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>ETG Summary</h2>
+          <pre id="etg-output">No level loaded.</pre>
+        </div>
+
+        <div class="card">
+          <h2>Validation Report</h2>
+          <pre id="report-output">Import a level JSON to start.</pre>
+        </div>
+
+        <div class="card">
+          <h2>Export</h2>
+          <div class="button-row">
+            <button id="export" class="ghost">Export Package</button>
+          </div>
+          <p class="hint">Download a JSON package (ETG + level + validation + 5D samples).</p>
+        </div>
+      </section>
+
+      <section class="stage">
+        <div class="stage-header">
+          <div class="status" id="status-output">status: waiting for import</div>
+          <div class="legend">Visuals are cosmetic only. Mechanics and collision are unchanged.</div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="game-canvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="src/main-import-level.js"></script>
+  </body>
+</html>

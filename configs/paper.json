@@ -1,0 +1,339 @@
+{
+  "state_model": {
+    "time_step_seconds": 1.0,
+    "max_time_horizon": 180,
+    "max_period_ticks": 180,
+    "local_padding_cells": 3,
+    "cell_size": 1.0,
+    "global_padding_cells": 4,
+    "local_model_padding_cells": 2,
+    "sibling_tolerance_radius_cells": 2
+  },
+  "simulation": {
+    "movement_speed": 7.5,
+    "gravity": -24.0,
+    "jump_speed": 9.6,
+    "air_speed_multiplier": 1.35,
+    "lock_padding": 0.6,
+    "lock_player_radius": 0.6,
+    "key_pickup_radius": 1.1
+  },
+  "validation": {
+    "allow_jump": true,
+    "allow_drop": true,
+    "compress_time": true,
+    "local": {
+      "max_time": 14,
+      "max_states": 7000,
+      "max_queue": 5200,
+      "max_jump_offsets": 100,
+      "allow_sibling_tolerance": true,
+      "policy": "strict_1hop"
+    },
+    "strict_by_scale": {
+      "small": {"max_time": null, "max_states": 364000, "max_queue": 294000, "max_jump_offsets": 504, "max_wall_time_sec": 73},
+      "medium": {"max_time": null, "max_states": 672000, "max_queue": 476000, "max_jump_offsets": 756, "max_wall_time_sec": 105},
+      "large": {"max_time": null, "max_states": 924000, "max_queue": 728000, "max_jump_offsets": 952, "max_wall_time_sec": 147}
+    },
+    "non_strict_by_scale": {
+      "small": {"max_time": null, "max_states": 50000, "max_queue": 36000, "max_jump_offsets": 220, "max_wall_time_sec": 8},
+      "medium": {"max_time": null, "max_states": 70000, "max_queue": 50000, "max_jump_offsets": 250, "max_wall_time_sec": 10},
+      "large": {"max_time": null, "max_states": 95000, "max_queue": 65000, "max_jump_offsets": 290, "max_wall_time_sec": 12}
+    }
+  },
+  "etg_bank": {
+    "pool_size": 120,
+    "select_count": 3,
+    "seed_prefix": "paper_etg",
+    "extra_batch_size": 40,
+    "max_extra_batches": 5
+  },
+  "execution": {
+    "seed_prefix": "paper_run",
+    "retry_limit": 2,
+    "run_timeout_sec": 600.0,
+    "resume": true,
+    "save_each": true
+  },
+  "candidate_selection": {
+    "pool_size": 12,
+    "top_p": 0.70,
+    "temperature": 0.80,
+    "weights": {
+      "alignment": 0.35,
+      "playability": 0.30,
+      "novelty": 0.20,
+      "shape": 0.15,
+      "risk": 0.20
+    }
+  },
+  "metrics": {
+    "controllability": {
+      "node_coverage": 0.20,
+      "route_length_agreement": 0.80
+    },
+    "topological_consistency": {
+      "topology_validity": 0.50,
+      "etg_fidelity": 0.50
+    },
+    "pacing_variation": {
+      "content_variation": 0.40,
+      "event_balance": 0.35,
+      "route_rhythm": 0.25
+    },
+    "overall": {
+      "playability": 0.30,
+      "key_lock_consistency": 0.15,
+      "controllability": 0.20,
+      "topological_consistency": 0.20,
+      "pacing_variation": 0.15
+    }
+  },
+  "benchmark": {
+    "scales": ["small", "medium", "large"],
+    "etgs_per_scale": 3,
+    "repeats": 100,
+    "strict": true,
+    "scale_profiles": {
+      "small": {"length": 6, "difficulty": 0.35, "keyLock": true, "branchChance": 0.45, "cpSatTimeLimitSec": 2.0, "cpSatDeterministicTimeLimit": 2.0, "cpSatNumWorkers": 1},
+      "medium": {"length": 10, "difficulty": 0.55, "keyLock": true, "branchChance": 0.65, "cpSatTimeLimitSec": 4.0, "cpSatDeterministicTimeLimit": 4.0, "cpSatNumWorkers": 1},
+      "large": {"length": 14, "difficulty": 0.75, "keyLock": true, "branchChance": 0.80, "cpSatTimeLimitSec": 8.0, "cpSatDeterministicTimeLimit": 8.0, "cpSatNumWorkers": 1}
+    },
+    "methods": [
+      {
+        "id": "main",
+        "label": "Main",
+        "generatorMode": "hdpcg_incremental",
+        "config": {
+          "componentStrategy": "diverse",
+          "candidatePoolSize": 12,
+          "selectionTopP": 0.70,
+          "selectionTemperature": 0.80,
+          "alignmentWeight": 0.35,
+          "playabilityWeight": 0.30,
+          "noveltyWeight": 0.20,
+          "shapeWeight": 0.15,
+          "riskWeight": 0.20,
+          "timeStep": 1.0,
+          "maxTimeHorizon": 180,
+          "validationMaxTimeHorizon": 180,
+          "validationMaxPeriodTicks": 180,
+          "validationLocalPaddingCells": 3,
+          "mainCanonicalSafeMode": true,
+          "mainCanonicalMaxComplexity": 0.65,
+          "mainCanonicalForceLegacyOnFail": true,
+          "mainPostEdgeRepair": true,
+          "mainReachabilityBudgetScale": 1.0,
+          "mainCanonicalChallengeScale": 0.38,
+          "mainCanonicalJitterScale": 0.30,
+          "mainSpineFirstMode": true,
+          "mainSpineRepairBudget": 3,
+          "mainSpineMaxDetour": 0.18,
+          "mainSpineEdgeSegmentLength": 6.2,
+          "mainSpineSafeGround": true,
+          "mainSpineLocalCheckStride": 1,
+          "mainSpineRollbackOnFail": true,
+          "mainInfillSkipLocalValidation": false,
+          "mainAlwaysLocalValidation": true,
+          "mainAllowFastLocalBudget": true,
+          "mainCanonicalValidationScale": 0.80,
+          "mainInfillValidationScale": 0.55,
+          "mainValidationMinTime": 12,
+          "mainValidationMinStates": 12000,
+          "mainValidationMinQueue": 10000,
+          "mainValidationMinJumpOffsets": 100,
+          "mainInfillDiversityTarget": 0.46,
+          "mainInfillFamilyMinCount": 7,
+          "mainInfillMaxPerNode": 2,
+          "mainInfillCoverageMinRatio": 0.35,
+          "mainInfillCoveragePass": true,
+          "mainEventPacingPass": true,
+          "mainEventBins": 6,
+          "mainEventDensityTarget": 0.09,
+          "mainEventDensityTolerance": 0.05,
+          "mainQuickMaxTime": 36,
+          "mainQuickMaxStates": 30000,
+          "mainQuickMaxQueue": 22000,
+          "mainQuickMaxJumpOffsets": 160,
+          "mainInfillMaxComplexity": 0.78,
+          "maxCandidateComplexity": 0.92,
+          "mainCanonicalSafeNodeFamilies": ["start_plaza", "start_ramp", "goal_platform", "open_room", "serpentine_room", "safe_key_pocket", "center_gate", "checkpoint_pocket"],
+          "disallowConnectorFamilies": ["moving_shuttle_bridge", "hazard_chicane_bridge", "split_merge_bridge", "vertical_lift_bridge", "zigzag_bridge"],
+          "connectorSegmentLength": 6.8,
+          "maxLocalRejects": 16,
+          "maxAttempts": 14,
+          "maxCanonicalRetries": 1,
+          "validationMaxTime": 14,
+          "validationMaxStates": 7000,
+          "validationMaxQueue": 5200,
+          "validationMaxJumpOffsets": 100,
+          "validationAllowSiblingTolerance": true,
+          "benchmarkLocalValidationStride": 1,
+          "benchmarkBestOfShared": 1,
+          "benchmarkTopologyBudgetProfile": "strict_balanced",
+          "keyLockPrecheckMode": "all",
+          "fallbackEnabled": true,
+          "forceConnectivityFallback": false,
+          "mainInfillConnectivityFallback": true,
+          "mainKeyLockRoutePass": true,
+          "mainRouteRepairBudget": 2,
+          "mainSpineForcedLinearPerEdgeCap": 2
+        }
+      },
+      {
+        "id": "constraint",
+        "label": "Constraint",
+        "generatorMode": "constraint_based",
+        "config": {
+          "componentStrategy": "diverse",
+          "candidatePoolSize": 16,
+          "selectionTopP": 0.82,
+          "selectionTemperature": 0.95,
+          "maxLocalRejects": 30,
+          "maxAttempts": 40,
+          "safetyMargin": 0.65,
+          "baselineKeyLockRoutePass": true,
+          "baselineRouteRepairBudget": 3,
+          "baselineRequireKeyNodeCoverage": true,
+          "baselineBuildRequiredEdgesOnly": true,
+          "baselineCanonicalSafeMode": true,
+          "baselineCanonicalMaxComplexity": 0.72,
+          "baselineCanonicalSurrogateStrictness": "high",
+          "baselineConnectivityBridgeMaxGap": 18.0,
+          "baselineKeyDetourMaxExtraRatio": 0.45,
+          "baselineLimitDynamicOnCanonical": true,
+          "benchmarkBestOfShared": 1,
+          "benchmarkTopologyBudgetProfile": "strict_balanced",
+          "keyLockPrecheckMode": "all",
+          "fallbackEnabled": true,
+          "connectorSegmentLength": 6.4
+        }
+      },
+      {
+        "id": "lane",
+        "label": "Lane",
+        "generatorMode": "lane",
+        "config": {
+          "componentStrategy": "legacy",
+          "laneIncludeBranches": true,
+          "laneSafeMode": true,
+          "laneSpacing": 14.0,
+          "laneMaxVertical": 2.1,
+          "laneForceKeyDetour": true,
+          "laneEnsureRequiredKeyPaths": true,
+          "baselineKeyLockRoutePass": true,
+          "baselineRouteRepairBudget": 3,
+          "laneDisableDynamicHazards": true,
+          "laneClearEnemiesInSafeMode": true,
+          "laneBranchAttachMaxGap": 16.0,
+          "laneConnectorSegmentLength": 6.4,
+          "laneKeyDetourMaxExtraRatio": 0.50,
+          "baselineRequireKeyNodeCoverage": true,
+          "benchmarkBestOfShared": 1,
+          "benchmarkTopologyBudgetProfile": "strict_balanced"
+        }
+      },
+      {
+        "id": "ga",
+        "label": "GA",
+        "generatorMode": "ga_baseline",
+        "config": {
+          "gaPopulation": 8,
+          "gaGenerations": 4,
+          "gaEliteRatio": 0.25,
+          "gaMutationRate": 0.25,
+          "gaTournamentSize": 3,
+          "gaSafeInitRatio": 0.5,
+          "gaTopologyMaxTime": 28,
+          "gaTopologyMaxStates": 80000,
+          "gaTopologyMaxJumpOffsets": 320,
+          "gaTopologyMaxWallTimeSec": 3.0,
+          "componentStrategy": "legacy",
+          "baselineKeyLockRoutePass": true,
+          "baselineRouteRepairBudget": 3,
+          "baselineBuildRequiredEdgesOnly": true,
+          "baselineCanonicalMaxComplexity": 0.72,
+          "baselineCanonicalSafeMode": true,
+          "baselineCanonicalSurrogateStrictness": "high",
+          "baselineConnectivityBridgeMaxGap": 18.0,
+          "baselineKeyDetourMaxExtraRatio": 0.45,
+          "baselineLimitDynamicOnCanonical": true,
+          "baselineRequireKeyNodeCoverage": true,
+          "connectorSegmentLength": 6.4,
+          "keyLockPrecheckMode": "all",
+          "maxAttempts": 32,
+          "safetyMargin": 0.65,
+          "benchmarkBestOfShared": 1,
+          "benchmarkTopologyBudgetProfile": "strict_balanced"
+        }
+      },
+      {
+        "id": "cpsat",
+        "label": "CP-SAT",
+        "generatorMode": "cpsat_baseline",
+        "config": {
+          "componentStrategy": "legacy",
+          "cpSatLaneRange": 2,
+          "cpSatLaneSpacingWorld": 16,
+          "cpSatRelaxRounds": 2,
+          "cpSatKeyBeforeLockMargin": 10,
+          "cpSatSynthesisSafeMode": true,
+          "cpSatPostRepairPasses": 2,
+          "cpSatRouteRepairPasses": 4,
+          "cpSatRequireKeyLockPath": true,
+          "cpSatMaxConnectorStep": 14.0,
+          "cpSatBuildRequiredEdgesOnly": false,
+          "cpSatTimeLimitSec": 6.0,
+          "cpSatDeterministicTimeLimit": 6.0,
+          "cpSatNumWorkers": 1,
+          "cpSatRepairMaxGap": 22.0,
+          "cpSatDisableDynamicHazards": true,
+          "cpSatClearEnemiesInSafeMode": true,
+          "baselineKeyLockRoutePass": true,
+          "baselineRouteRepairBudget": 3,
+          "baselineRequireKeyNodeCoverage": true,
+          "benchmarkBestOfShared": 1,
+          "benchmarkTopologyBudgetProfile": "strict_balanced"
+        }
+      }
+    ]
+  },
+  "ablation": {
+    "repeats": 100,
+    "profiles_file": "configs/ablation_profiles.json"
+  },
+  "cross_domain_pilot": {
+    "repeats_per_etg_method": 20,
+    "base_seed": 20269514,
+    "etg_seed_stride": 10000,
+    "repeat_seed_stride": 97,
+    "method_seed_stride": 1009,
+    "save_levels": false,
+    "variants": [
+      {
+        "id": "fg_compact_switchback",
+        "x_scale": 0.92,
+        "y_scale": 1.05,
+        "edge_scale": 0.90,
+        "intensity_delta": -0.02,
+        "extra_y": {"safe_a": 0.20, "risk_a": -0.15, "gate_b": 0.18}
+      },
+      {
+        "id": "fg_wide_branch",
+        "x_scale": 1.06,
+        "y_scale": 1.48,
+        "edge_scale": 1.10,
+        "intensity_delta": 0.03,
+        "extra_y": {"risk_a": -0.24, "risk_b": -0.20, "safe_a": 0.22, "safe_b": 0.18}
+      },
+      {
+        "id": "fg_long_chicane",
+        "x_scale": 1.18,
+        "y_scale": 1.22,
+        "edge_scale": 1.22,
+        "intensity_delta": 0.05,
+        "extra_y": {"split_a": -0.12, "safe_a": 0.16, "risk_a": 0.35, "gate_b": -0.18}
+      }
+    ]
+  }
+}
